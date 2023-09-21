@@ -1,0 +1,13 @@
+pip install beautifulsoup4 requests selenium
+
+from bs4 import BeautifulSoup
+import requests
+
+url = 'http://example.com'
+response = requests.get(url)
+
+if response.status_code == 200:
+    soup = BeautifulSoup(response.text, 'html.parser')
+    # 원하는 정보 추출
+else:
+    print('Failed to retrieve the webpage')
