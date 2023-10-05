@@ -31,7 +31,9 @@ const rows = csvData.split('\n');
 for (let i = 1; i < rows.length; i++) {
     const cells = rows[i].split(',');
 
-    for (let j = 2; j < cells.length; j += 4) {
+    console.log(`Date: ${cells[0]}, Kind: ${cells[1]}`);
+
+    for (let j = 2; j < cells.length; j += 2) {
         const menuName = cells[j];
         const allergyNumbers = cells[j + 1].split('.').map(Number).filter(num => num !== 0);
 
