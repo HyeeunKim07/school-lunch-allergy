@@ -1,0 +1,24 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+.menuItem {
+    margin-bottom: 10px;
+}
+
+.menuName {
+    font-weight: bold;
+}
+
+.allergy {
+    margin-left: 10px;
+}
+
+.menuItem .dateHeader {
+    font-weight: bold;
+}
+
+.menuItem .kind {
+    font-weight: bold;
+}
