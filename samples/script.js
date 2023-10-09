@@ -40,14 +40,8 @@ for (let i = 1; i < rows.length; i++) {
     menuInfo.classList.add('menuItem');
 
     const dateHeader = document.createElement('div');
-    dateHeader.classList.add('dateHeader');
-    dateHeader.innerText = `날짜: ${date}`;
+    dateHeader.innerText = `날짜: ${date}, 종류: ${kind}`;
     menuInfo.appendChild(dateHeader);
-
-    const kindElement = document.createElement('div');
-    kindElement.classList.add('kind');
-    kindElement.innerText = `종류: ${kind}`;
-    menuInfo.appendChild(kindElement);
 
     for (let j = 2; j < cells.length; j += 2) {
         const menuName = cells[j];
@@ -55,14 +49,13 @@ for (let i = 1; i < rows.length; i++) {
 
         const menuItemDiv = document.createElement('div');
         menuItemDiv.classList.add('menuName');
-        menuItemDiv.innerText = `${menuName}:`;
+        menuItemDiv.innerText = `${menuName}`;
 
         // 알러지 체크
-        for (let k = 0; k < allergyNumbers.length; k++) {
+        for (const allergy of allergyNumbers) {
             const allergyText = document.createElement('span');
             allergyText.classList.add('allergy');
-            const separator = k === allergyNumbers.length - 1 ? '' : ', ';
-            allergyText.innerText = `${allergyNames[allergyNumbers[k]]}${separator}`;
+            allergyText.innerText = `${allergyNames[allergy]}`;
             menuItemDiv.appendChild(allergyText);
         }
 
