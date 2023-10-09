@@ -1,3 +1,5 @@
+// csvData가 너무 많아서 따로 빼둔거
+
 const csvData = `Date,Kind,Menu1,Allergy1,Menu2,Allergy2,Menu3,Allergy3,Menu4,Allergy4,Menu5,Allergy5,Menu6,Allergy6,Menu7,Allergy7,Menu8,Allergy8,Menu9,Allergy9,Menu10,Allergy10,Menu11,Allergy11,Menu12,Allergy12,Menu13,Allergy13,Menu14,Allergy14,Menu15,Allergy15,Menu16,Allergy16,Menu17,Allergy17
 0910,조식,모듬빵종, ,잼,1.2.5.6,미역국, ,참떡갈비,4.5.6.10.13.15.16.18,해시브라운,5.6.12,깍두기, ,흑임자깨죽, ,누룽지, ,후르트링, ,초코크런치,2.5.6,감귤쥬스, ,우유, ,그릴후랑크,2.5.6.10.15.16,베이컨스크램블에그,1.10,사과, ,토마토, 
 0910,중식,볼도넛,1.2.5.6,유부된장국, ,도라지오이생채, ,제육강정,5.6.10.12.13,깍두기, ,이프로,11.13,훈제오리볶음밥,1.2.5.6.9.13,양상추콘샐러드, 
