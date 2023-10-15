@@ -1,6 +1,6 @@
 # school-lunch-allergy
 
-# First Due Date: 10.13
+## First Due Date: 10.13
 - web scrapping
 - visualization
 - HTML + CSS
