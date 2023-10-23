@@ -5,10 +5,40 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>메뉴 및 알러지 정보</title>
-    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 </head>
 <body>
-    <div id="menuInfo"></div>
-    <script src="script.js"></script>
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">20231016</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="table-primary">
+            <th scope="row">조식</th>
+            <td id="breakfast-cell"></td>
+          </tr>
+          <tr class="table-success">
+            <th scope="row">중식</th>
+            <td id="lunch-cell"></td>
+          </tr>
+          <tr class="table-warning">
+            <th scope="row">석식</th>
+            <td id="dinner-cell"></td>
+          </tr>
+        </tbody>
+      </table>
+      <script src="test.js"></script>
+      <script>
+        const breakfastCell = document.getElementById('breakfast-cell');
+        breakfastCell.innerHTML = breakfastMenu;
+        const lunchCell = document.getElementById('lunch-cell');
+        lunchCell.innerHTML = lunchMenu;
+        const dinnerCell = document.getElementById('dinner-cell');
+        dinnerCell.innerHTML = dinnerMenu;
+      </script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
 </body>
 </html>
