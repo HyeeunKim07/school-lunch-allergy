@@ -106,21 +106,93 @@ const data = [
     }
 ]
 
-const parsedData = data.slice(1).map(item => {
-    return {
-        "type": item["MMEAL_SC_NM"],
-        "date": item["MLSV_YMD"],
-        "menu": item["DDISH_NM"]
-    };
+// 숫자 알레르기 변환
+const allergyNames = {
+    1: '난류',
+    2: '우유',
+    3: '메밀',
+    4: '땅콩',
+    5: '대두',
+    6: '밀가루',
+    7: '고등어',
+    8: '게',
+    9: '새우',
+    10: '돼지고기',
+    11: '복숭아',
+    12: '토마토',
+    13: '아황산염',
+    14: '호두',
+    15: '닭고기',
+    16: '쇠고기',
+    17: '오징어',
+    18: '조개류(굴, 전복, 홍합 포함)',
+    19: '잣'
+};
+
+const formatter = new Intl.DateTimeFormat('ko-KR', { timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit' }); 
+const dif = localStorage.getItem('dif') === null ? localStorage.setItem('dif', 0) : parseInt(localStorage.getItem('dif')) 
+
+
+const today = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" })) 
+today.setDate(today.getDate() + dif); 
+currentDate = formatter.format(new Date(today)).replace(/\D/g, '') 
+
+fetch("https://open.neis.go.kr/hub/mealServiceDietInfo?ATPT_OFCDC_SC_CODE=P10&SD_SCHUL_CODE=8320104&Type=json&MLSV_YMD=202310&KEY=b0da414019cc409fb799819adf220a8a")
+.then((response) => response.json())
+.then((data) => {
+    console.log(localStorage.getItem('dif'))
+    console.log(data.mealServiceDietInfo[1].row)
+    const parsedData = data.mealServiceDietInfo[1].row.map(item => {
+        return {
+            "type": item["MMEAL_SC_NM"],
+            "date": item["MLSV_YMD"],
+            "menu": convertAllergyNumberToKorean(item["DDISH_NM"])
+        };
+    });
+    const breakfastMenu = parsedData.find(item => item.type === '조식' && item.date === '20231016').menu;
+    const lunchMenu = parsedData.find(item => item.type === '중식' && item.date === '20231016').menu;
+    const dinnerMenu = parsedData.find(item => item.type === '석식' && item.date === '20231016').menu;
+
+    const breakfastCell = document.getElementById('breakfast-cell');
+    breakfastCell.innerHTML = breakfastMenu;
+    const lunchCell = document.getElementById('lunch-cell');
+    lunchCell.innerHTML = lunchMenu;
+    const dinnerCell = document.getElementById('dinner-cell');
+    dinnerCell.innerHTML = dinnerMenu;
+
+    const previousButton = document.getElementById('previous-button');
+    previousButton.addEventListener('click',previousButtonClickHandler);
+
+    const todayButton = document.getElementById('today-button');
+    todayButton.addEventListener('click',todayButtonClickHandler);
+
+    const nextButton = document.getElementById('next-button');
+    nextButton.addEventListener('click',nextButtonClickHandler);
 });
 
-const breakfastMenu = parsedData.find(item => item.type === '조식' && item.date === '20231016').menu;
-const lunchMenu = parsedData.find(item => item.type === '중식' && item.date === '20231016').menu;
-const dinnerMenu = parsedData.find(item => item.type === '석식' && item.date === '20231016').menu;
+function convertAllergyNumberToKorean(menu){
+    for (let i = Object.keys(allergyNames).length; i > 0; i--) {
+        menu = menu.replaceAll(i, allergyNames[i])
+    }
+    return menu
+}
 
-// 숫자 알레르기 변환
+const previousButtonClickHandler = () =>{
+    console.log('previousButton clicked!');
+    const currentDif = parseInt(localStorage.getItem('dif'))
+    localStorage.setItem("dif", currentDif-1);
+    console.log(localStorage.getItem('dif'))
+  };
 
-console.log('parsedData=',parsedData);
-console.log('조식=',breakfastMenu);
-console.log('중식=',lunchMenu);
-console.log('석식=',dinnerMenu);
+const todayButtonClickHandler = () =>{
+    console.log('todayButton clicked!');
+    localStorage.setItem("dif", 0);
+    console.log(localStorage.getItem('dif'))
+  };
+
+const nextButtonClickHandler = () =>{
+    console.log('nextButton clicked!');
+    const currentDif = parseInt(localStorage.getItem('dif'))
+    localStorage.setItem("dif", currentDif+1);
+    console.log(localStorage.getItem('dif'))
+  };

@@ -31,14 +31,19 @@
         </tbody>
       </table>
       <script src="test.js"></script>
-      <script>
-        const breakfastCell = document.getElementById('breakfast-cell');
-        breakfastCell.innerHTML = breakfastMenu;
-        const lunchCell = document.getElementById('lunch-cell');
-        lunchCell.innerHTML = lunchMenu;
-        const dinnerCell = document.getElementById('dinner-cell');
-        dinnerCell.innerHTML = dinnerMenu;
-      </script>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          <li class="page-item">
+            <a id="previous-button" class="page-link">Previous</a>
+          </li>
+          <li class="page-item">
+            <a id="today-button" class="page-link active" href="#">Today</a>
+          </li>
+          <li class="page-item">
+            <a id="next-button" class="page-link" href="#">Next</a>
+          </li>
+        </ul>
+      </nav>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
 </body>
 </html>
