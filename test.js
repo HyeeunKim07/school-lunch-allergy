@@ -178,21 +178,15 @@ function convertAllergyNumberToKorean(menu){
 }
 
 const previousButtonClickHandler = () =>{
-    console.log('previousButton clicked!');
     const currentDif = parseInt(localStorage.getItem('dif'))
     localStorage.setItem("dif", currentDif-1);
-    console.log(localStorage.getItem('dif'))
   };
 
 const todayButtonClickHandler = () =>{
-    console.log('todayButton clicked!');
     localStorage.setItem("dif", 0);
-    console.log(localStorage.getItem('dif'))
   };
 
 const nextButtonClickHandler = () =>{
-    console.log('nextButton clicked!');
     const currentDif = parseInt(localStorage.getItem('dif'))
     localStorage.setItem("dif", currentDif+1);
-    console.log(localStorage.getItem('dif'))
   };
