@@ -182,12 +182,14 @@ const previousButtonClickHandler = () =>{
     const currentDif = parseInt(localStorage.getItem('dif'))
     localStorage.setItem("dif", currentDif-1);
     console.log(localStorage.getItem('dif'))
+	location.reload()
   };
 
 const todayButtonClickHandler = () =>{
     console.log('todayButton clicked!');
     localStorage.setItem("dif", 0);
     console.log(localStorage.getItem('dif'))
+	location.reload()
   };
 
 const nextButtonClickHandler = () =>{
@@ -195,4 +197,5 @@ const nextButtonClickHandler = () =>{
     const currentDif = parseInt(localStorage.getItem('dif'))
     localStorage.setItem("dif", currentDif+1);
     console.log(localStorage.getItem('dif'))
+	location.reload
   };
