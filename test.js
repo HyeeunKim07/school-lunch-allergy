@@ -134,9 +134,10 @@ const dif = localStorage.getItem('dif') === null ? localStorage.setItem('dif', 0
 
 const today = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" })) 
 today.setDate(today.getDate() + dif); 
-currentDate = formatter.format(new Date(today)).replace(/\D/g, '') 
+currentDate = formatter.format(new Date(today)).replace(/\D/g, '')
+document.getElementById('today').innerHTML = currentDate
 
-fetch("https://open.neis.go.kr/hub/mealServiceDietInfo?ATPT_OFCDC_SC_CODE=P10&SD_SCHUL_CODE=8320104&Type=json&MLSV_YMD=202310&KEY=b0da414019cc409fb799819adf220a8a")
+fetch("https://open.neis.go.kr/hub/mealServiceDietInfo?ATPT_OFCDC_SC_CODE=P10&SD_SCHUL_CODE=8320104&Type=json&MLSV_YMD=202311&KEY=b0da414019cc409fb799819adf220a8a")
 .then((response) => response.json())
 .then((data) => {
     console.log(localStorage.getItem('dif'))
@@ -149,9 +150,9 @@ fetch("https://open.neis.go.kr/hub/mealServiceDietInfo?ATPT_OFCDC_SC_CODE=P10&SD
         };
     });
 
-    const breakfastMenu = parsedData.find(item => item.type === '조식' && item.date === '20231016').menu;
-    const lunchMenu = parsedData.find(item => item.type === '중식' && item.date === '20231016').menu;
-    const dinnerMenu = parsedData.find(item => item.type === '석식' && item.date === '20231016').menu;
+    const breakfastMenu = parsedData.find(item => item.type === '조식' && item.date === currentDate).menu;
+    const lunchMenu = parsedData.find(item => item.type === '중식' && item.date === currentDate).menu;
+    const dinnerMenu = parsedData.find(item => item.type === '석식' && item.date === currentDate).menu;
 
     const breakfastCell = document.getElementById('breakfast-cell');
     breakfastCell.innerHTML = breakfastMenu;
