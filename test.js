@@ -180,13 +180,16 @@ function convertAllergyNumberToKorean(menu){
 const previousButtonClickHandler = () =>{
     const currentDif = parseInt(localStorage.getItem('dif'))
     localStorage.setItem("dif", currentDif-1);
+	location.reload()
   };
 
 const todayButtonClickHandler = () =>{
     localStorage.setItem("dif", 0);
+	location.reload()
   };
 
 const nextButtonClickHandler = () =>{
     const currentDif = parseInt(localStorage.getItem('dif'))
     localStorage.setItem("dif", currentDif+1);
+	location.reload()
   };
