@@ -147,32 +147,16 @@ const allergyNames = {
   19: "잣",
 };
 
-const formatter = new Intl.DateTimeFormat("ko-KR", {
-  timeZone: "Asia/Seoul",
-  year: "numeric",
-  month: "2-digit",
-  day: "2-digit",
-});
-const dif =
-  localStorage.getItem("dif") === null
-    ? localStorage.setItem("dif", 0)
-    : parseInt(localStorage.getItem("dif"));
-
-const today = new Date(
-  new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" })
-);
-today.setDate(today.getDate() + dif);
-currentDate = formatter.format(new Date(today)).replace(/\D/g, "");
-document.getElementById("today").innerHTML = currentDate;
+let currentDate = moment().tz("Asia/Seoul").format("YYYYMMDD");
+let parsedData = [];
 
 fetch(
   "https://open.neis.go.kr/hub/mealServiceDietInfo?ATPT_OFCDC_SC_CODE=P10&SD_SCHUL_CODE=8320104&Type=json&MLSV_YMD=202311&KEY=b0da414019cc409fb799819adf220a8a"
 )
   .then((response) => response.json())
   .then((data) => {
-    console.log(localStorage.getItem("dif"));
     console.log(data.mealServiceDietInfo[1].row);
-    const parsedData = data.mealServiceDietInfo[1].row.map((item) => {
+    parsedData = data.mealServiceDietInfo[1].row.map((item) => {
       return {
         type: item["MMEAL_SC_NM"],
         date: item["MLSV_YMD"],
@@ -180,22 +164,7 @@ fetch(
       };
     });
 
-    const breakfastMenu = parsedData.find(
-      (item) => item.type === "조식" && item.date === currentDate
-    ).menu;
-    const lunchMenu = parsedData.find(
-      (item) => item.type === "중식" && item.date === currentDate
-    ).menu;
-    const dinnerMenu = parsedData.find(
-      (item) => item.type === "석식" && item.date === currentDate
-    ).menu;
-
-    const breakfastCell = document.getElementById("breakfast-cell");
-    breakfastCell.innerHTML = breakfastMenu;
-    const lunchCell = document.getElementById("lunch-cell");
-    lunchCell.innerHTML = lunchMenu;
-    const dinnerCell = document.getElementById("dinner-cell");
-    dinnerCell.innerHTML = dinnerMenu;
+    setMenu();
 
     const previousButton = document.getElementById("previous-button");
     previousButton.addEventListener("click", previousButtonClickHandler);
@@ -214,19 +183,46 @@ function convertAllergyNumberToKorean(menu) {
   return menu;
 }
 
+function setMenu() {
+  try {
+    const breakfastMenu = parsedData.find(
+      (item) => item.type === "조식" && item.date === currentDate
+    ).menu;
+    const lunchMenu = parsedData.find(
+      (item) => item.type === "중식" && item.date === currentDate
+    ).menu;
+    const dinnerMenu = parsedData.find(
+      (item) => item.type === "석식" && item.date === currentDate
+    ).menu;
+
+    const breakfastCell = document.getElementById("breakfast-cell");
+    breakfastCell.innerHTML = breakfastMenu;
+    const lunchCell = document.getElementById("lunch-cell");
+    lunchCell.innerHTML = lunchMenu;
+    const dinnerCell = document.getElementById("dinner-cell");
+    dinnerCell.innerHTML = dinnerMenu;
+
+    document.getElementById("current-date").innerText = currentDate;
+  } catch (error) {
+    alert("나이스에서 급식 식단 정보를 업데이트하지 않았습니다");
+  }
+}
+
 const previousButtonClickHandler = () => {
-  const currentDif = parseInt(localStorage.getItem("dif"));
-  localStorage.setItem("dif", currentDif - 1);
-  location.reload();
+  currentDate = moment(currentDate, "YYYYMMDD")
+    .subtract(1, "days")
+    .format("YYYYMMDD");
+  setMenu();
 };
 
 const todayButtonClickHandler = () => {
-  localStorage.setItem("dif", 0);
-  location.reload();
+  currentDate = moment().tz("Asia/Seoul").format("YYYYMMDD");
+  setMenu();
 };
 
 const nextButtonClickHandler = () => {
-  const currentDif = parseInt(localStorage.getItem("dif"));
-  localStorage.setItem("dif", currentDif + 1);
-  location.reload();
+  currentDate = moment(currentDate, "YYYYMMDD")
+    .add(1, "days")
+    .format("YYYYMMDD");
+  setMenu();
 };
