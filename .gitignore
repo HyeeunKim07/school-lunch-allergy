@@ -1,0 +1,8 @@
+# Local Netlify folder
+.netlify
+
+# Dependency directories
+node_modules/
+
+# dotenv environment variable files
+.env
