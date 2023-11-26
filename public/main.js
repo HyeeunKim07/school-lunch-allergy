@@ -39,6 +39,7 @@ fetch("/.netlify/functions/getDataFromDB")
     });
 
     setMenu();
+    updateMenuWithSelectedAllergies();
 
     const previousButton = document.getElementById("previous-button");
     previousButton.addEventListener("click", previousButtonClickHandler);
@@ -57,15 +58,18 @@ function convertAllergyNumberToKorean(menu) {
   return menu;
 }
 
+let breakfastMenu = "";
+let lunchMenu = "";
+let dinnerMenu = "";
 function setMenu() {
   try {
-    const breakfastMenu = parsedData.find(
+    breakfastMenu = parsedData.find(
       (item) => item.type === "조식" && item.date === currentDate
     ).menu;
-    const lunchMenu = parsedData.find(
+    lunchMenu = parsedData.find(
       (item) => item.type === "중식" && item.date === currentDate
     ).menu;
-    const dinnerMenu = parsedData.find(
+    dinnerMenu = parsedData.find(
       (item) => item.type === "석식" && item.date === currentDate
     ).menu;
 
@@ -88,11 +92,13 @@ const previousButtonClickHandler = () => {
     .subtract(1, "days")
     .format("YYYYMMDD");
   setMenu();
+  updateMenuWithSelectedAllergies();
 };
 
 const todayButtonClickHandler = () => {
   currentDate = moment().tz("Asia/Seoul").format("YYYYMMDD");
   setMenu();
+  updateMenuWithSelectedAllergies();
 };
 
 const nextButtonClickHandler = () => {
@@ -100,4 +106,126 @@ const nextButtonClickHandler = () => {
     .add(1, "days")
     .format("YYYYMMDD");
   setMenu();
+  updateMenuWithSelectedAllergies();
 };
+
+const allergyCheckboxesContainer = document.getElementById("allergyCheckboxes");
+
+// 알러지 체크박스 동적으로 생성
+Object.keys(allergyNames).forEach((key) => {
+  const value = allergyNames[key];
+  const checkboxDiv = document.createElement("div");
+  checkboxDiv.className = "col-6 col-md-4 col-lg-3 mb-3";
+  checkboxDiv.innerHTML = `
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="${key}" id="allergy${key}" name="allergies[]">
+        <label class="form-check-label" for="allergy${key}">${value}</label>
+      </div>
+    `;
+  allergyCheckboxesContainer.appendChild(checkboxDiv);
+});
+
+// localStorage에서 저장된 알러지 정보 불러오기
+const savedAllergies =
+  JSON.parse(localStorage.getItem("selectedAllergies")) || [];
+
+// 저장된 알러지 정보를 기반으로 체크박스 초기화
+savedAllergies.forEach((allergy) => {
+  const checkbox = document.getElementById(`allergy${allergy}`);
+  if (checkbox) {
+    checkbox.checked = true;
+  }
+});
+
+function submitForm() {
+  // 선택된 알러지 확인
+  const selectedCheckboxes = document.querySelectorAll(
+    'input[name="allergies[]"]:checked'
+  );
+  const selectedAllergies = Array.from(selectedCheckboxes).map(
+    (checkbox) => checkbox.value
+  );
+
+  // 선택된 알러지를 localStorage에 저장
+  localStorage.setItem("selectedAllergies", JSON.stringify(selectedAllergies));
+
+  // 선택된 알러지를 콘솔에 출력
+  console.log("선택된 알러지:", selectedAllergies);
+  // 여기에서 선택된 알러지에 대한 추가적인 처리를 할 수 있습니다.
+}
+
+// 알러지 체크박스에 대한 이벤트 리스너 등록
+document.addEventListener("DOMContentLoaded", function () {
+  const allergyCheckboxes = document.querySelectorAll(
+    'input[name="allergies[]"]'
+  );
+
+  // 페이지 로드 시 localStorage에서 저장된 알러지 정보 불러오기
+  const savedAllergies =
+    JSON.parse(localStorage.getItem("selectedAllergies")) || [];
+
+  // 저장된 알러지 정보를 기반으로 체크박스 초기화
+  savedAllergies.forEach((allergy) => {
+    const checkbox = document.getElementById(`allergy${allergy}`);
+    if (checkbox) {
+      checkbox.checked = true;
+    }
+  });
+
+  // 체크박스 변경 이벤트에 대한 리스너 등록
+  allergyCheckboxes.forEach((checkbox) => {
+    checkbox.addEventListener("change", function () {
+      updateSelectedAllergies();
+      updateMenuWithSelectedAllergies();
+    });
+  });
+
+  // 선택된 알러지를 localStorage에 저장하는 함수
+  function updateSelectedAllergies() {
+    const selectedCheckboxes = document.querySelectorAll(
+      'input[name="allergies[]"]:checked'
+    );
+    const selectedAllergies = Array.from(selectedCheckboxes).map(
+      (checkbox) => checkbox.value
+    );
+    localStorage.setItem(
+      "selectedAllergies",
+      JSON.stringify(selectedAllergies)
+    );
+  }
+});
+
+// 메뉴를 선택된 알러지에 따라 스타일을 적용하여 업데이트하는 함수
+function updateMenuWithSelectedAllergies() {
+  document.getElementById("breakfast-cell").innerHTML =
+    convertSelectedAllergyNameToRed(breakfastMenu);
+  document.getElementById("lunch-cell").innerHTML =
+    convertSelectedAllergyNameToRed(lunchMenu);
+  document.getElementById("dinner-cell").innerHTML =
+    convertSelectedAllergyNameToRed(dinnerMenu);
+}
+
+function convertSelectedAllergyNameToRed(menu) {
+  const selectedCheckboxes = document.querySelectorAll(
+    'input[name="allergies[]"]:checked'
+  );
+  const selectedAllergies = Array.from(selectedCheckboxes).map(
+    (checkbox) => checkbox.value
+  );
+
+  for (let i = Object.keys(allergyNames).length; i > 0; i--) {
+    const allergyName = allergyNames[i];
+    const isSelected = selectedAllergies.includes(i.toString());
+
+    // 선택된 알러지에 대한 스타일 추가
+    if (isSelected) {
+      menu = menu.replaceAll(
+        allergyName,
+        `<span style="color: red;">${allergyName}</span>`
+      );
+    } else {
+      menu = menu.replaceAll(i, allergyName);
+    }
+  }
+  return menu;
+}
