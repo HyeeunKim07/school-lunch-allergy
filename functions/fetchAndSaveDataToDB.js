@@ -1,27 +1,21 @@
-const { MongoClient, ServerApiVersion } = require("mongodb");
 const axios = require("axios");
+const moment = require("moment-timezone");
+const utils = require("./common/dbUtils.js");
 require("dotenv").config();
 
 exports.handler = async function (evnet, context) {
   try {
-    const url = `https://open.neis.go.kr/hub/mealServiceDietInfo?ATPT_OFCDC_SC_CODE=P10&SD_SCHUL_CODE=8320104&Type=json&MLSV_YMD=202311&KEY=${process.env.API_KEY}`;
+    const fromDate = moment()
+      .tz("Asia/Seoul")
+      .subtract(7, "days")
+      .format("YYYYMMDD");
+    const toDate = moment().tz("Asia/Seoul").add(7, "days").format("YYYYMMDD");
+    const url = `https://open.neis.go.kr/hub/mealServiceDietInfo?ATPT_OFCDC_SC_CODE=P10&SD_SCHUL_CODE=8320104&Type=json&MLSV_FROM_YMD=${fromDate}&MLSV_TO_YMD=${toDate}&KEY=${process.env.API_KEY}`;
 
     const response = await axios.get(url);
     const data = await response.data;
 
-    const uri = `mongodb+srv://${process.env.DB_ID}:${process.env.DB_PASSWORD}@cluster0.h2zjch3.mongodb.net/?retryWrites=true&w=majority`;
-    const client = new MongoClient(uri, {
-      serverApi: {
-        version: ServerApiVersion.v1,
-        strict: true,
-        deprecationErrors: true,
-      },
-    });
-
-    await client.connect();
-
-    const database = client.db("menuDatabase");
-    const collection = database.collection("menuCollection");
+    const { client, collection } = await utils.connectToDatabase();
 
     const result = await collection.updateOne(
       { _id: "id" },

@@ -11,6 +11,7 @@
   "dependencies": {
     "axios": "^1.6.2",
     "dotenv": "^16.3.1",
+    "moment-timezone": "^0.5.43",
     "mongodb": "^6.3.0"
   }
 }

@@ -23,9 +23,10 @@ const allergyNames = {
 let currentDate = moment().tz("Asia/Seoul").format("YYYYMMDD");
 let parsedData = [];
 
-fetch(
-  "https://open.neis.go.kr/hub/mealServiceDietInfo?ATPT_OFCDC_SC_CODE=P10&SD_SCHUL_CODE=8320104&Type=json&MLSV_YMD=202311&KEY=b0da414019cc409fb799819adf220a8a"
-)
+// fetch(
+//   "https://open.neis.go.kr/hub/mealServiceDietInfo?ATPT_OFCDC_SC_CODE=P10&SD_SCHUL_CODE=8320104&Type=json&MLSV_YMD=202311&KEY=b0da414019cc409fb799819adf220a8a"
+// )
+fetch("/.netlify/functions/getDataFromDB")
   .then((response) => response.json())
   .then((data) => {
     console.log(data.mealServiceDietInfo[1].row);
