@@ -76,7 +76,8 @@ function setMenu() {
     const dinnerCell = document.getElementById("dinner-cell");
     dinnerCell.innerHTML = dinnerMenu;
 
-    document.getElementById("current-date").innerText = currentDate;
+    document.getElementById("current-date").innerText =
+      currentDate + " 급식 메뉴";
   } catch (error) {
     alert("나이스에서 급식 식단 정보를 업데이트하지 않았습니다");
   }
